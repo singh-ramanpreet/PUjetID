@@ -24,11 +24,11 @@ vertices, vertexLabel = Handle("std::vector<reco::Vertex>"), "offlinePrimaryVert
 # open file (you can use 'edmFileUtil -d /store/whatever.root' to get the physical file name)                                                                                                                                                                                                                                                                                               
 events = Events("file:////afs/cern.ch/user/h/hinzmann/workspace/tmp/patTupleUpdatedFromAODzmm.root")
                    
-eff_loose=0
-eff_test=0
-eff_medium=0
-eff_tight=0
-num_jets=0
+#eff_loose=0
+#eff_test=0
+#eff_medium=0
+#eff_tight=0
+#num_jets=0
 		                                                                                                                                                                                                                                                                                                                                                                            
 for iev,event in enumerate(events):                                                                                                                                                                                                                                                                                                                                                         
     #if iev >= 10: break                                                                                                                                                                                                                                                                                                                                                                     
@@ -40,8 +40,8 @@ for iev,event in enumerate(events):
                                                                                                                                                                                                                                                                                                                                                                                             
     print "\nEvent %d: run %6d, lumi %4d, event %12d" % (iev,event.eventAuxiliary().run(), event.eventAuxiliary().luminosityBlock(),event.eventAuxiliary().event())                                                                                                                                                                                                                         
            
-    print len(vertices.product())
-    if len(vertices.product())<15: continue
+    #print len(vertices.product())
+    #if len(vertices.product())<15: continue
 	                                                                                                                                                                                                                                                                                                                                                                                    
     # Jets (standard AK4)
     for i,j in enumerate(jets.product()):
@@ -55,17 +55,16 @@ for iev,event in enumerate(events):
         for var in variables:
           string+=var+"=%.4f, " % (getattr(pujetids.product().get(i),var)())
         print string
-	qwe
-        try: genJetMatch=deltaR(j.genJet().eta(),j.genJet().phi(),j.eta(),j.phi())<0.2 and ((abs(j.partonFlavour()) > 0 and abs(j.partonFlavour()) < 6) or (j.partonFlavour() == 21))
-        except: genJetMatch=0
-        if genJetMatch:
-            num_jets+=1.
-            eff_loose+=bool(pujetidFullId.product().get(i) & (1 << 2))
-            eff_medium+=bool(pujetidFullId.product().get(i) & (1 << 1))
-            eff_tight+=bool(pujetidFullId.product().get(i) & (1 << 0))
+        #try: genJetMatch=deltaR(j.genJet().eta(),j.genJet().phi(),j.eta(),j.phi())<0.2 and ((abs(j.partonFlavour()) > 0 and abs(j.partonFlavour()) < 6) or (j.partonFlavour() == 21))
+        #except: genJetMatch=0
+        #if genJetMatch:
+        #    num_jets+=1.
+        #    eff_loose+=bool(pujetidFullId.product().get(i) & (1 << 2))
+        #    eff_medium+=bool(pujetidFullId.product().get(i) & (1 << 1))
+        #    eff_tight+=bool(pujetidFullId.product().get(i) & (1 << 0))
 
-print num_jets
-print eff_test/num_jets
-print eff_loose/num_jets
-print eff_medium/num_jets
-print eff_tight/num_jets
+#print num_jets
+#print eff_test/num_jets
+#print eff_loose/num_jets
+#print eff_medium/num_jets
+#print eff_tight/num_jets

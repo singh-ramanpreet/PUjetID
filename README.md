@@ -3,7 +3,7 @@ is documented in pileupJetId/README_Scarlet
 
 # Code to synchronize variables on single events in AOD, MiniAOD and JMEValidator
 
-1. Run PU jet ID on the very same RelVal event in AOD, MiniAOD and with JMEValidator. Edit the location of the output root files according to your directories. Switch to more recent RelVal samples once outdated:
+1. Run PU jet ID on the very same RelVal event in AOD, MiniAOD and with JMEValidator. Edit the location of the output root files according to your directories. Make sure all scripts use the same global tag for JEC. Switch to more recent RelVal samples once outdated:
 
 cmsRun releaseValidation/fromAOD.py
 
