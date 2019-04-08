@@ -5,7 +5,7 @@ config.General.transferOutputs = True
 config.General.transferLogs = False
 
 config.JobType.pluginName = 'Analysis'
-config.JobType.psetName = 'flat-MC-cfg.py'
+config.JobType.psetName = 'flat-MC-cfg_102X.py'
 
 config.JobType.outputFiles = ['mc_flatTree.root']
 #config.JobType.maxMemoryMB = 6400
