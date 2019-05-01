@@ -33,11 +33,15 @@ from PhysicsTools.PatAlgos.selectionLayer1.jetSelector_cfi import selectedPatJet
 process.goodJets = selectedPatJets.clone(src='patJetsReapplyJEC',cut='pt>20 && abs(eta)<4.7')
 
 #--- define the pileup id -------------------------------
+from RecoJets.JetProducers.PileupJetID_cfi import _chsalgos_102x
 process.load("RecoJets.JetProducers.PileupJetID_cfi")
 process.pileupJetId.jets = cms.InputTag("goodJets")
 process.pileupJetId.inputIsCorrected = True
 process.pileupJetId.applyJec = False
 process.pileupJetId.vertexes = cms.InputTag("offlineSlimmedPrimaryVertices") 
+process.pileupJetId.algos = cms.VPSet(_chsalgos_102x)
+
+process.pileupJetIdPuppi = process.pileupJetId.clone(jets = "goodJetsPuppi")
 
 ##-------------------- User analyzers  --------------------------------
 process.jmechs            = cms.EDAnalyzer('JMEFlatTreeProducer',

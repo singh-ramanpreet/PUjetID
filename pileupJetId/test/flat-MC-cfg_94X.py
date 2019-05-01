@@ -47,11 +47,13 @@ process.goodJetsPuppi = selectedPatJets.clone(src='patJetsReapplyJECPuppi',cut='
 
 
 #--- define the pileup id -------------------------------
+from RecoJets.JetProducers.PileupJetID_cfi import _chsalgos_94x
 process.load("RecoJets.JetProducers.PileupJetID_cfi")
 process.pileupJetId.jets = cms.InputTag("goodJets")
 process.pileupJetId.inputIsCorrected = True
 process.pileupJetId.applyJec = False
 process.pileupJetId.vertexes = cms.InputTag("offlineSlimmedPrimaryVertices") 
+process.pileupJetId.algos = cms.VPSet(_chsalgos_94x)
 
 process.pileupJetIdPuppi = process.pileupJetId.clone(jets = "goodJetsPuppi")
 
