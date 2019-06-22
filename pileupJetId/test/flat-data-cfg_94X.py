@@ -1,15 +1,15 @@
 import FWCore.ParameterSet.Config as cms 
 process = cms.Process('myprocess')
-process.TFileService=cms.Service("TFileService",fileName=cms.string('flatTree.root'))
+process.TFileService=cms.Service("TFileService",fileName=cms.string('data_flatTree.root'))
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
-process.GlobalTag.globaltag = ''
+process.GlobalTag.globaltag = '94X_dataRun2_v11'
 
 ##-------------------- Define the source  ----------------------------
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 process.source = cms.Source("PoolSource",
   fileNames = cms.untracked.vstring(
-    ''
-    )
+    '/store/data/Run2017B/DoubleMuon/MINIAOD/17Nov2017-v1/50000/14D7DA10-EED3-E711-9AD6-3417EBE6451F.root'
+  )
 )
 #############   Format MessageLogger #################
 process.load('FWCore.MessageService.MessageLogger_cfi')
@@ -22,15 +22,28 @@ process.patJetCorrFactorsReapplyJEC = process.updatedPatJetCorrFactors.clone(
   src = cms.InputTag("slimmedJets"),
   levels = ['L1FastJet','L2Relative','L3Absolute','L2L3Residual'],
   payload = 'AK4PFchs' 
-) 
+)
+
+process.patJetCorrFactorsReapplyJECPuppi = process.updatedPatJetCorrFactors.clone(
+  src = cms.InputTag("slimmedJetsPuppi"),
+  levels = ['L1FastJet','L2Relative','L3Absolute','L2L3Residual'],
+  payload = 'AK4PFPuppi'
+)
+
 process.patJetsReapplyJEC = process.updatedPatJets.clone(
   jetSource = cms.InputTag("slimmedJets"),
   jetCorrFactorsSource = cms.VInputTag(cms.InputTag("patJetCorrFactorsReapplyJEC"))
 )
 
+process.patJetsReapplyJECPuppi = process.updatedPatJets.clone(
+  jetSource = cms.InputTag("slimmedJetsPuppi"),
+  jetCorrFactorsSource = cms.VInputTag(cms.InputTag("patJetCorrFactorsReapplyJECPuppi"))
+)
+
 #--- define the good jets -------------------------------
 from PhysicsTools.PatAlgos.selectionLayer1.jetSelector_cfi import selectedPatJets
 process.goodJets = selectedPatJets.clone(src='patJetsReapplyJEC',cut='pt>20 && abs(eta)<4.7')
+process.goodJetsPuppi = selectedPatJets.clone(src='patJetsReapplyJECPuppi',cut='pt>20 && abs(eta)<4.7')
 
 #--- define the pileup id -------------------------------
 from RecoJets.JetProducers.PileupJetID_cfi import _chsalgos_94x
