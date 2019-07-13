@@ -46,10 +46,8 @@ class JMEFlatTreeProducer : public edm::EDAnalyzer
 
   private:  
     virtual bool isGoodMuon(const pat::Muon &mu,const reco::Vertex &vtx);
-    virtual bool isGoodElectron(const pat::Electron &el,const reco::Vertex &vtx,float rho);
-    float MuonRelIso(const reco::Candidate *cand);
-    float ElectronRelIso(const reco::Candidate *cand,float rho);
-    float LeptonRelIso(const reco::Candidate *cand,float rho){return cand->isElectron() ? ElectronRelIso(cand,rho) : MuonRelIso(cand);}
+    virtual bool isGoodElectron(const pat::Electron &el);
+    //float LeptonRelIso(const reco::Candidate *cand)
     void initialize();
     //---- configurable parameters --------  
     edm::EDGetTokenT<pat::JetCollection> jetsToken;

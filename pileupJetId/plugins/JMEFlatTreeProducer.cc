@@ -249,82 +249,17 @@ bool JMEFlatTreeProducer::isGoodMuon(const pat::Muon &mu,const reco::Vertex &vtx
   if(mu.pt() < minLepPt_) res = false;
   if(fabs(mu.eta()) > maxLepEta_) res = false;
   if(!mu.isTightMuon(vtx)) res = false;
-  // --- isolation --- 
-  if(res && MuonRelIso((reco::Candidate*)&mu) > 0.15) res = false;
+  if (!mu.passed(reco::Muon::PFIsoTight)) res = false; 
   return res;
 }
 //////////////////////////////////////////////////////////////////////////////////////////
-float JMEFlatTreeProducer::MuonRelIso(const reco::Candidate *cand)
-{
-  pat::Muon mu = *((pat::Muon*)cand);
-  reco::MuonPFIsolation pfIso = mu.pfIsolationR04();
-  float relIso = (float)(pfIso.sumChargedHadronPt+max(double(0.0),pfIso.sumNeutralHadronEt+pfIso.sumPhotonEt-0.5*pfIso.sumPUPt))/mu.pt();
-  return relIso;
-}
-//////////////////////////////////////////////////////////////////////////////////////////
-bool JMEFlatTreeProducer::isGoodElectron(const pat::Electron &el,const reco::Vertex &vtx,float rho)
+bool JMEFlatTreeProducer::isGoodElectron(const pat::Electron &el)
 {
   bool res = true; // by default is good, unless fails a cut bellow
-  bool isEBEEGap = fabs(el.superCluster()->eta()) > 1.4442 && fabs(el.superCluster()->eta()) < 1.5660 ? 1 : 0;
   if(el.pt() < minLepPt_) res = false;
   if(fabs(el.eta()) > maxLepEta_ && res == true) res = false;
-  if(isEBEEGap && res==true) res = false;
-  bool isEB = fabs(el.superCluster()->eta()) < 1.4442 ? 1 : 0;
-  bool isEE = fabs(el.superCluster()->eta()) > 1.5660 ? 1 : 0;
-  if(res) {
-    float trackMomentumAtVtx = (float)sqrt(el.trackMomentumAtVtx().mag2());
-    float ecalEnergy = (float)el.ecalEnergy();
-    float full5x5_sigmaIetaIeta = (float)el.full5x5_sigmaIetaIeta();
-    float dEtaIn = (float)el.deltaEtaSuperClusterTrackAtVtx();
-    float dPhiIn = (float)el.deltaPhiSuperClusterTrackAtVtx();
-    float HoE = (float)el.hadronicOverEm();
-    float ooEmooP = (float)fabs(1/ecalEnergy - 1/trackMomentumAtVtx);
-    float d0 = (float)el.gsfTrack()->dxy(vtx.position());
-    float dz = (float)el.gsfTrack()->dz(vtx.position());
-    int expectedMissingInnerHits = el.gsfTrack()->hitPattern().numberOfAllHits(reco::HitPattern::MISSING_INNER_HITS);
-    bool passConversionVeto = el.passConversionVeto();
-    if(isEB) {
-      if(res && full5x5_sigmaIetaIeta > 0.010557) res = false;
-      if(res && fabs(dEtaIn) > 0.012442) res = false;
-      if(res && fabs(dPhiIn) > 0.072624) res = false;
-      if(res && HoE > 0.121476) res = false;
-      if(res && ooEmooP > 0.221803) res = false;
-      if(res && fabs(d0) > 0.022664) res = false;
-      if(res && fabs(dz) > 0.173670) res = false;
-      if(res && expectedMissingInnerHits >= 2 ) res = false;
-      if(res && passConversionVeto == false ) res = false;
-    }
-    if(isEE) {
-      if(res && full5x5_sigmaIetaIeta > 0.032602) res = false;
-      if(res && fabs(dEtaIn) > 0.010654) res = false;
-      if(res && fabs(dPhiIn) > 0.145129) res = false;
-      if(res && HoE > 0.131862) res = false;
-      if(res && ooEmooP > 0.142283) res = false;
-      if(res && fabs(d0) > 0.097358) res = false;
-      if(res && fabs(dz) > 0.198444) res = false;
-      if(res && expectedMissingInnerHits >= 2 ) res = false;
-      if(res && passConversionVeto == false ) res = false;
-    }
-  }
-  if(res && LeptonRelIso((reco::Candidate*)&el,rho) > 0.15) res = false;
-  return res;
-}
-//////////////////////////////////////////////////////////////////////////////////////////
-float JMEFlatTreeProducer::ElectronRelIso(const reco::Candidate *cand,float rho)
-{
-  pat::Electron el = *((pat::Electron*)cand); 
-  float relIsoWithEA = 0;
-  const int nEtaBins = 5;
-  const float etaBinLimits[nEtaBins+1] = {0.0, 0.8, 1.3, 2.0, 2.2, 2.5};
-  const float effectiveAreaValues[nEtaBins] = {0.1013, 0.0988, 0.0572, 0.0842, 0.1530};
-  reco::GsfElectron::PflowIsolationVariables pfIso = el.pfIsolationVariables();
-  float etaSC = el.superCluster()->eta();
-  // Find eta bin first. If eta>2.5, the last eta bin is used.
-  int etaBin = 0;
-  while(etaBin < nEtaBins-1 && abs(etaSC) > etaBinLimits[etaBin+1]) ++etaBin;
-  float area = effectiveAreaValues[etaBin];
-  relIsoWithEA = (float)(pfIso.sumChargedHadronPt+max(float(0.0),pfIso.sumNeutralHadronEt+pfIso.sumPhotonEt-rho*area))/el.pt();
-  return relIsoWithEA;
+  //return res;
+  return false; // skipping electrons for now
 }
 //////////////////////////////////////////////////////////////////////////////////////////
 void JMEFlatTreeProducer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
@@ -388,7 +323,7 @@ void JMEFlatTreeProducer::analyze(edm::Event const& iEvent, edm::EventSetup cons
       if (isGoodMuon(mu,(*recVtxs)[0])) myLeptons.push_back(&mu);
     }
     for (const pat::Electron &el : *electrons) {
-      if (isGoodElectron(el,(*recVtxs)[0],*rho)) myLeptons.push_back(&el);
+      if (isGoodElectron(el)) myLeptons.push_back(&el);
     }
     std::sort(myLeptons.begin(),myLeptons.end(),[](const reco::Candidate *a,const reco::Candidate *b){return a->pt() > b->pt();});
     nLeptons_ = (int)myLeptons.size();
@@ -398,7 +333,7 @@ void JMEFlatTreeProducer::analyze(edm::Event const& iEvent, edm::EventSetup cons
       lPhi_->push_back(myLeptons[ii]->phi());
       lE_->push_back(myLeptons[ii]->energy());
       lId_->push_back(myLeptons[ii]->pdgId());
-      lIso_->push_back(LeptonRelIso(myLeptons[ii],*rho));
+     // lIso_->push_back(LeptonRelIso(myLeptons[ii],*rho));
     }
   }
   if (nLeptons_ > 1) {
