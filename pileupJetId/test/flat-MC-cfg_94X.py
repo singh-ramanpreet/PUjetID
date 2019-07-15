@@ -8,7 +8,7 @@ process.GlobalTag.globaltag = '94X_mc2017_realistic_v12'
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 process.source = cms.Source("PoolSource",
   fileNames = cms.untracked.vstring(
-  "/store/mc/RunIIFall17MiniAOD/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/94X_mc2017_realistic_v10_ext1-v1/10000/0E90697F-88F7-E711-9891-001E6779262C.root"
+  "/store/mc/RunIIFall17MiniAODv2/DY1JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/70000/FEAE18E1-0442-E811-801F-484D7E8DF085.root"
   )
 )
 #############   Format MessageLogger #################
