@@ -351,21 +351,6 @@ void JMEFlatTreeProducer::analyze(edm::Event const& iEvent, edm::EventSetup cons
     float DRmax = 0.4;
     for(auto & lep: myLeptons) if( deltaR(lep->eta(),lep->phi(),ijet->eta(),ijet->phi()) < DRmax ) isLeptonMatched = true;
     if (isLeptonMatched) continue;
-    bool jetIdTight(false);
-    if (fabs(ijet->eta()) <= 2.7) {
-      jetIdTight = (ijet->neutralHadronEnergyFraction()<0.9 && ijet->neutralEmEnergyFraction()<0.9 && ijet->neutralMultiplicity()+ijet->chargedMultiplicity()>1);
-      if (fabs(ijet->eta()) <= 2.4) {
-        jetIdTight *= (ijet->chargedHadronEnergyFraction()>0 && ijet->chargedMultiplicity()>0 && ijet->chargedEmEnergyFraction()<0.99);  
-      }
-    }
-    else if (fabs(ijet->eta()) > 2.7 && fabs(ijet->eta()) <= 3.0) {
-      jetIdTight = (ijet->neutralEmEnergyFraction()<0.9 && ijet->neutralMultiplicity()>2);
-    }
-    else {
-      jetIdTight = (ijet->neutralEmEnergyFraction()<0.9 && ijet->neutralMultiplicity()>10);
-    }
-
-    if (!jetIdTight) continue;
 
     chf_           ->push_back(ijet->chargedHadronEnergyFraction());
     cemf_          ->push_back(ijet->chargedEmEnergyFraction());
