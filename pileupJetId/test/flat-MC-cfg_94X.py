@@ -93,8 +93,7 @@ process.jmechs            = cms.EDAnalyzer('JMEFlatTreeProducer',
   rho                     = cms.InputTag('fixedGridRhoFastjetAll'),
   btagger                 = cms.string('pfCombinedInclusiveSecondaryVertexV2BJetTags'),
   triggerNames            = cms.vstring(
-    'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v',
-    'HLT_Mu19_TrkIsoVVL_Mu9_TrkIsoVVL_DZ_v'
+    'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v'
   ),
   triggerResults   = cms.InputTag('TriggerResults','','HLT'),
   triggerPrescales = cms.InputTag('patTrigger'),
