@@ -42,23 +42,47 @@ process.patJetsReapplyJECPuppi = process.updatedPatJets.clone(
 
 #--- define the good jets -------------------------------
 from PhysicsTools.PatAlgos.selectionLayer1.jetSelector_cfi import selectedPatJets
-process.goodJets = selectedPatJets.clone(src='patJetsReapplyJEC',cut='pt>20 && abs(eta)<4.7')
-process.goodJetsPuppi = selectedPatJets.clone(src='patJetsReapplyJECPuppi',cut='pt>20 && abs(eta)<4.7')
+process.goodJets = selectedPatJets.clone(src='patJetsReapplyJEC', cut='pt > 10 && abs(eta) < 4.7')
+process.goodJetsPuppi = selectedPatJets.clone(src='patJetsReapplyJECPuppi', cut='pt > 10 && abs(eta)<4.7')
+
+#---- Tight JetID -----------------------------------------------------
+tight_abs_eta_2p7_chs_puppi = """((neutralHadronEnergyFraction < 0.90 && neutralEmEnergyFraction < 0.90 && numberOfDaughters > 1)
+&& ((abs(eta) <= 2.4 && chargedHadronEnergyFraction > 0 && chargedMultiplicity > 0) || abs(eta) > 2.4) && abs(eta) <= 2.7)"""
+
+tight_abs_eta_2p7_3p0_chs = """(neutralEmEnergyFraction > 0.02 && neutralEmEnergyFraction < 0.99 && neutralMultiplicity > 2
+&& abs(eta) > 2.7 && abs(eta) <= 3.0 )"""
+
+tight_abs_eta_3p0_chs = """(neutralHadronEnergyFraction > 0.02 && neutralEmEnergyFraction < 0.90 && neutralMultiplicity > 10 && abs(eta) > 3.0 )"""
+
+tight_abs_eta_2p7_3p0_puppi = """(neutralHadronEnergyFraction < 0.99 && abs(eta) > 2.7 && abs(eta) <= 3.0 )"""
+
+tight_abs_eta_3p0_puppi = """(neutralHadronEnergyFraction > 0.02 && neutralEmEnergyFraction < 0.90
+&& neutralMultiplicity > 2 && neutralMultiplicity < 15 && abs(eta) > 3.0 )"""
+
+process.tightIdJets = cms.EDFilter("PATJetSelector",
+        src = cms.InputTag("goodJets"),
+        cut = cms.string(tight_abs_eta_2p7_chs_puppi + " || " + tight_abs_eta_2p7_3p0_chs + " || " + tight_abs_eta_3p0_chs)
+        )
+
+process.tightIdJetsPuppi = cms.EDFilter("PATJetSelector",
+        src = cms.InputTag("goodJetsPuppi"),
+        cut = cms.string(tight_abs_eta_2p7_chs_puppi + " || " + tight_abs_eta_2p7_3p0_puppi + " || " + tight_abs_eta_3p0_puppi)
+        )
 
 #--- define the pileup id -------------------------------
 from RecoJets.JetProducers.PileupJetID_cfi import _chsalgos_94x
 process.load("RecoJets.JetProducers.PileupJetID_cfi")
-process.pileupJetId.jets = cms.InputTag("goodJets")
+process.pileupJetId.jets = cms.InputTag("tightIdJets")
 process.pileupJetId.inputIsCorrected = True
 process.pileupJetId.applyJec = False
 process.pileupJetId.vertexes = cms.InputTag("offlineSlimmedPrimaryVertices") 
 process.pileupJetId.algos = cms.VPSet(_chsalgos_94x)
 
-process.pileupJetIdPuppi = process.pileupJetId.clone(jets = "goodJetsPuppi")
+process.pileupJetIdPuppi = process.pileupJetId.clone(jets = "tightIdJetsPuppi")
 
 ##-------------------- User analyzers  --------------------------------
 process.jmechs            = cms.EDAnalyzer('JMEFlatTreeProducer',
-  jets                    = cms.InputTag('goodJets'),
+  jets                    = cms.InputTag('tightIdJets'),
   muons                   = cms.InputTag('slimmedMuons'),
   electrons               = cms.InputTag('slimmedElectrons'),
   met                     = cms.InputTag('slimmedMETs'),
@@ -81,7 +105,7 @@ process.jmechs            = cms.EDAnalyzer('JMEFlatTreeProducer',
 )
 
 process.jmepuppi = process.jmechs.clone(
-  jets                    = "goodJetsPuppi",
+  jets                    = "tightIdJetsPuppi",
   met                     = "slimmedMETsPuppi",
   pileupJetId             = "pileupJetIdPuppi",
   pileupJetIdFlag         = "pileupJetIdPuppi:fullId",
@@ -98,6 +122,8 @@ process.p = cms.Path(
    process.patJetsReapplyJECPuppi +
    process.goodJets +
    process.goodJetsPuppi +
+   process.tightIdJets +
+   process.tightIdJetsPuppi +
    process.pileupJetId +
    process.pileupJetIdPuppi +
    process.jmechs +
