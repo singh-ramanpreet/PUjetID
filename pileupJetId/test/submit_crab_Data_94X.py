@@ -28,12 +28,7 @@ inputDatasets = ['/DoubleMuon/Run2017B-31Mar2018-v1/MINIAOD',
                  '/DoubleMuon/Run2017C-31Mar2018-v1/MINIAOD',
                  '/DoubleMuon/Run2017D-31Mar2018-v1/MINIAOD',
                  '/DoubleMuon/Run2017E-31Mar2018-v1/MINIAOD',
-                 '/DoubleMuon/Run2017F-31Mar2018-v1/MINIAOD', 
-                 '/DoubleEG/Run2017B-31Mar2018-v1/MINIAOD',
-                 '/DoubleEG/Run2017C-31Mar2018-v1/MINIAOD',
-                 '/DoubleEG/Run2017D-31Mar2018-v1/MINIAOD',
-                 '/DoubleEG/Run2017E-31Mar2018-v1/MINIAOD',
-                 '/DoubleEG/Run2017F-31Mar2018-v1/MINIAOD']
+                 '/DoubleMuon/Run2017F-31Mar2018-v1/MINIAOD']
 
 from CRABAPI.RawCommand import crabCommand
 
