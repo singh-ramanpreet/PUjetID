@@ -42,8 +42,8 @@ process.patJetsReapplyJECPuppi = process.updatedPatJets.clone(
 
 #--- define the good jets -------------------------------
 from PhysicsTools.PatAlgos.selectionLayer1.jetSelector_cfi import selectedPatJets
-process.goodJets = selectedPatJets.clone(src='patJetsReapplyJEC', cut='pt > 10 && abs(eta) < 4.7')
-process.goodJetsPuppi = selectedPatJets.clone(src='patJetsReapplyJECPuppi', cut='pt > 10 && abs(eta)<4.7')
+process.goodJets = selectedPatJets.clone(src='patJetsReapplyJEC', cut='pt > 20 && abs(eta) < 5.0')
+process.goodJetsPuppi = selectedPatJets.clone(src='patJetsReapplyJECPuppi', cut='pt > 20 && abs(eta) < 5.0')
 
 #---- Tight JetID -----------------------------------------------------
 tight_abs_eta_2p7_chs_puppi = """((neutralHadronEnergyFraction < 0.90 && neutralEmEnergyFraction < 0.90 && numberOfDaughters > 1)
