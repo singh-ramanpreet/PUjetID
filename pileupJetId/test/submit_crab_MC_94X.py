@@ -10,6 +10,7 @@ config.JobType.psetName = 'flat-MC-cfg_94X.py'
 config.JobType.outputFiles = ['mc_flatTree.root']
 config.JobType.maxJobRuntimeMin = 120
 #config.JobType.maxMemoryMB = 6400
+config.JobType.allowUndistributedCMSSW = True
 
 config.Data.inputDataset = ''
 
