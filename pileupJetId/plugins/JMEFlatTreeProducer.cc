@@ -288,8 +288,8 @@ void JMEFlatTreeProducer::analyze(edm::Event const& iEvent, edm::EventSetup cons
     for(unsigned int itrig=0;itrig<triggerResults->size();itrig++) {
       string trigger_name = string(names.triggerName(itrig));
       //--- erase the last character, i.e. the version number----
-      trigger_name.pop_back();
-      if (trigger_name == triggerNames_[k]) {
+      // trigger_name.pop_back();
+      if (trigger_name.find(triggerNames_[k]) == 0) {
         bit = triggerResults->accept(itrig); 
         pre = triggerPrescales->getPrescaleForIndex(itrig);
         if (bit) {
