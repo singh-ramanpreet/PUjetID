@@ -29,6 +29,7 @@ config.Site.storageSite = 'T3_US_FNALLPC'
 
 inputDatasets = [
         '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer19UL17MiniAOD-106X_mc2017_realistic_v6-v2/MINIAODSIM', #101077576
+        '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer19UL17MiniAOD-106X_mc2017_realistic_v6-v2/MINIAODSIM', #202549488
 #        '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM', #182359906
 #        '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017RECOSIMstep_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM', #48675378
 #        '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017RECOSIMstep_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM', #49125561
@@ -38,7 +39,10 @@ from CRABAPI.RawCommand import crabCommand
 
 for dataset in inputDatasets:
     print(dataset)
-    config.General.requestName = '2017_' + dataset.split("/")[1].split("_")[0]
+    config.General.requestName = '2017_' + dataset.split("/")[1]
+    if "ext" in dataset:
+        config.General.requestName = config.General.requestName + "_" + dataset.split("/")[2].split("_")[-1]
     print(config.General.requestName)
     config.Data.inputDataset = dataset
+    #crabCommand('submit', '--dryrun', config=config)
     crabCommand('submit', config=config)
