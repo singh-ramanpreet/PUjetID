@@ -45,7 +45,7 @@ for dataset in inputDatasets:
     if "ext" in dataset:
         config.General.requestName = config.General.requestName + "_" + dataset.split("/")[2].split("_")[-1]
     print(config.General.requestName)
-    config.JobType.scriptArgs = [
+    config.JobType.pyCfgParams = [
         "%s" % 'isAPV=1' if "APV" in dataset else 'isAPV=0',
         "ptcut=%s" % ptcut]
     print
