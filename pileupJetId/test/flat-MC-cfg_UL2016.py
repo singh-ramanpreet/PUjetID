@@ -20,15 +20,15 @@ else:
     file_string = 'Summer19UL16APV'
 
 from CondCore.CondDB.CondDB_cfi import CondDB
-CondDBJECFile = CondDB.clone(connect = cms.string('sqlite:%s_V5_MC.db' % file_string))
+CondDBJECFile = CondDB.clone(connect = cms.string('sqlite:%s_V7_MC.db' % file_string))
 process.jec = cms.ESSource(
     'PoolDBESSource', CondDBJECFile,
     toGet = cms.VPSet(
         cms.PSet(record = cms.string('JetCorrectionsRecord'),
-                 tag = cms.string('JetCorrectorParametersCollection_%s_V5_MC_AK4PFchs' % file_string),
+                 tag = cms.string('JetCorrectorParametersCollection_%s_V7_MC_AK4PFchs' % file_string),
                  label = cms.untracked.string('AK4PFchs')),
         cms.PSet(record = cms.string('JetCorrectionsRecord'),
-                 tag = cms.string('JetCorrectorParametersCollection_%s_V5_MC_AK4PFPuppi' % file_string),
+                 tag = cms.string('JetCorrectorParametersCollection_%s_V7_MC_AK4PFPuppi' % file_string),
                  label = cms.untracked.string('AK4PFPuppi'))
     )
 )

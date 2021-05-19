@@ -12,7 +12,7 @@ config.JobType.outputFiles = ['mc_flatTree.root']
 #config.JobType.maxMemoryMB = 6400
 config.JobType.allowUndistributedCMSSW = True
 
-config.JobType.inputFiles = ['Summer19UL16_V5_MC.db', 'Summer19UL16APV_V5_MC.db']
+config.JobType.inputFiles = ['Summer19UL16_V7_MC.db', 'Summer19UL16APV_V7_MC.db']
 
 config.Data.inputDataset = ''
 
@@ -28,10 +28,10 @@ config.Site.storageSite = 'T3_US_FNALLPC'
 #config.Site.whitelist = ['T3_US_FNALLPC']
 
 inputDatasets = [
-    '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer19UL16MiniAOD-106X_mcRun2_asymptotic_v13-v2/MINIAODSIM',
-    '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer19UL16MiniAODAPV-106X_mcRun2_asymptotic_preVFP_v8-v1/MINIAODSIM',
-    '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer19UL16MiniAOD-106X_mcRun2_asymptotic_v13-v2/MINIAODSIM',
-    '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer19UL16MiniAODAPV-106X_mcRun2_asymptotic_preVFP_v8-v1/MINIAODSIM'
+    '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL16MiniAOD-106X_mcRun2_asymptotic_v13-v2/MINIAODSIM',
+    '/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL16MiniAODAPV-106X_mcRun2_asymptotic_preVFP_v8-v1/MINIAODSIM',
+    '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL16MiniAOD-106X_mcRun2_asymptotic_v13-v2/MINIAODSIM',
+    '/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIISummer20UL16MiniAODAPV-106X_mcRun2_asymptotic_preVFP_v8-v1/MINIAODSIM'
 ]
 
 from CRABAPI.RawCommand import crabCommand
